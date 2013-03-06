@@ -1,0 +1,3 @@
+# CrashPrevention Config.
+# Restart when only this much ram left. (In megabytes)
+minimum_ram: 256
