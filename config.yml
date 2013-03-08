@@ -1,3 +1,12 @@
 # CrashPrevention Config.
 # Restart when only this much ram left. (In megabytes)
 minimum_ram: 256
+
+# Number of times to check RAM usage before actually restarting.
+# In this example, if the server stays below the minimum RAM for two checks,
+# then the server will restart. Say the free ram goes back up in check two,
+# the value will reset and the restart will be cancelled.
+tries: 2
+
+# Wether or not to send usage warnings to console.
+debug: false

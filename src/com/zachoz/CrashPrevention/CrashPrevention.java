@@ -9,7 +9,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class CrashPrevention extends JavaPlugin{
+public class CrashPrevention extends JavaPlugin {
 
     public final Logger logger = Logger.getLogger("Minecraft");
 
@@ -30,12 +30,13 @@ public class CrashPrevention extends JavaPlugin{
     
 	public int Countdown;
 	int count = 31;
+	public int tries = 0;
 
 public void shutdowntimer() {
 	Countdown = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 		public void run() {
 			count--;
-			if(count == 30 || count == 20 || count == 15 ||count < 11){
+			if(count == 30 || count == 20 || count == 15 ||count < 11) {
 				Bukkit.broadcastMessage(ChatColor.DARK_RED + "Server will automatically restart in " + ChatColor.AQUA + count + ChatColor.DARK_RED + " seconds!");
 				if(count == 0) {
 					Bukkit.getServer().getScheduler().cancelTask(Countdown);
@@ -43,7 +44,7 @@ public void shutdowntimer() {
 					for (Player p : Bukkit.getOnlinePlayers()) {
 					    p.kickPlayer(ChatColor.RED + "Server automatically restarting due to low available resources! Relog!");
 					}
-					getServer().shutdown();		
+				getServer().shutdown();	
 		    }
 		}
 	    }
@@ -56,10 +57,21 @@ public void checkFreeRam() {
 		    Runtime runtime = Runtime.getRuntime();
 			  
 			  if ((runtime.freeMemory() / 1024 / 1024) < getConfig().getInt("minimum_ram")) {
-			      Bukkit.broadcastMessage(ChatColor.RED + "Server is running low on available resources! Automatically restarting to prevent lag!");
-			      shutdowntimer();
-			      Bukkit.getServer().getScheduler().cancelTask(ramCheck);
-			  }
+			      tries++;
+			      if (getConfig().getBoolean("debug")) {
+			      logger.info("Warning, server is below running below defined amount of RAM!");
+			    }
+			      
+			      if (getConfig().getInt("tries") == tries) {
+				      Bukkit.broadcastMessage(ChatColor.RED + "Server is running low on available resources! Automatically restarting to prevent lag!");
+				      shutdowntimer();
+				      Bukkit.getServer().getScheduler().cancelTask(ramCheck);
+				  }
+			} else {
+			    tries = 0;
+			}
+			  
+			  
 	    }
 	}, 0L, 200L);
 }
