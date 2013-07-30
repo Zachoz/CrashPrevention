@@ -8,5 +8,11 @@ minimum_ram: 256
 # the value will reset and the restart will be cancelled.
 tries: 2
 
+# Defines restart broadcast message
+restart_broadcast: '&cServer is running low on available resources! Automatically restarting to prevent lag!'
+
+# Defines kick message for restarts
+restart_kick_message: '&cServer automatically restarting due to low available resources! Relog!'
+
 # Wether or not to send usage warnings to console.
 debug: false
